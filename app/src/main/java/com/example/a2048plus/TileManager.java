@@ -20,6 +20,7 @@ public class TileManager implements TileManagerCallback, Sprite {
     private Tile[][] matrix = new Tile[4][4];
     private boolean moving = false;
     private ArrayList<Tile> movingTiles;
+    private boolean toSpawn = false;
 
     public TileManager(Resources resources, int standardSize, int screenWidth, int screenHeight){
         this.resources = resources;
@@ -60,7 +61,7 @@ public class TileManager implements TileManagerCallback, Sprite {
         matrix = new Tile[4][4];
         movingTiles = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             int x = new Random().nextInt(4);
             int y = new Random().nextInt(4);
             if (matrix[x][y] == null) {
@@ -101,7 +102,7 @@ public class TileManager implements TileManagerCallback, Sprite {
 
     public void onSwipe(SwipeCallback.Direction direction) {
         if (!moving) {
-            moving = true;
+            //moving = true;
             Tile[][] newMatrix = new Tile[4][4];
             switch (direction) {
                 case UP:
@@ -297,7 +298,40 @@ public class TileManager implements TileManagerCallback, Sprite {
 
                     break;
             }
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (newMatrix[i][j] != matrix[i][j]) {
+                        toSpawn = true;
+                        break;
+                    }
+                }
+            }
             matrix = newMatrix;
         }
     }
+
+    @Override
+    public void finishedMoving(Tile t) {
+        movingTiles.remove(t);
+        if (movingTiles.isEmpty()) {
+            moving = false;
+            spawn();
+        }
+    }
+
+    private void spawn() {
+        if (toSpawn) {
+            toSpawn = false;
+            Tile t = null;
+            while (t == null) {
+                int x = new Random().nextInt(4);
+                int y = new Random().nextInt(4);
+                if (matrix[x][y] == null) {
+                    t = new Tile(standardSize, screenWidth, screenHeight, this, x, y);
+                    matrix[x][y] = t;
+                }
+            }
+        }
+    }
+
 }
