@@ -17,6 +17,7 @@ public class TileManager implements TileManagerCallback, Sprite {
     private Tile t;
     private ArrayList<Integer> drawables = new ArrayList<>();
     private HashMap<Integer, Bitmap> tileBitmaps = new HashMap<>();
+    private Tile[][] matrix = new Tile[4][4];
 
     public TileManager(Resources resources, int standardSize, int screenWidth, int screenHeight){
         this.resources = resources;
@@ -25,7 +26,8 @@ public class TileManager implements TileManagerCallback, Sprite {
         this.screenHeight = screenHeight;
         initBitmaps();
 
-        t = new Tile(standardSize, screenWidth,screenHeight,this);
+        t = new Tile(standardSize, screenWidth, screenHeight, this, 1, 1);
+        matrix[1][1] = t;
     }
 
     private void initBitmaps(){
@@ -65,6 +67,23 @@ public class TileManager implements TileManagerCallback, Sprite {
 
     @Override
     public void update() {
+        t.update();
+    }
 
+    public void onSwipe(SwipeCallback.Direction direction) {
+        switch (direction) {
+            case UP:
+                t.move(0, 1);
+                break;
+            case DOWN:
+                t.move(3, 1);
+                break;
+            case LEFT:
+                t.move(1, 0);
+                break;
+            case RIGHT:
+                t.move(1, 3);
+                break;
+        }
     }
 }

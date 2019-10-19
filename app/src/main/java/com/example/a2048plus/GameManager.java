@@ -5,21 +5,27 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.a2048plus.sprites.Grid;
 
-public class GameManager extends SurfaceView implements SurfaceHolder.Callback {
+public class GameManager extends SurfaceView implements SurfaceHolder.Callback, SwipeCallback {
 
     private MainThread thread;
     private Grid grid;
     private int scWidth, scHeight, standardSize;
     private TileManager tileManager;
 
+    private SwipeListener swipe;
+
     public GameManager(Context context, AttributeSet attributeSet){
         super(context,attributeSet);
+        setLongClickable(true);
+
         getHolder().addCallback(this);
+        swipe = new SwipeListener(getContext(), this);
 
         DisplayMetrics dm = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -67,5 +73,16 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawRGB(255,255,255);
         grid.draw(canvas);
         tileManager.draw(canvas);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        swipe.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void onSwipe(Direction direction) {
+        tileManager.onSwipe(direction);
     }
 }
