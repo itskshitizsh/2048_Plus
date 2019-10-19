@@ -9,7 +9,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.a2048plus.sprites.Grid;
-import com.example.a2048plus.sprites.TileManager;
 
 public class GameManager extends SurfaceView implements SurfaceHolder.Callback {
 

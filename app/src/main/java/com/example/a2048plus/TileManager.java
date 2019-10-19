@@ -1,11 +1,12 @@
-package com.example.a2048plus.sprites;
+package com.example.a2048plus;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import com.example.a2048plus.R;
+import com.example.a2048plus.sprites.Sprite;
+import com.example.a2048plus.sprites.Tile;
 
 import java.util.ArrayList;
 import java.util.HashMap;

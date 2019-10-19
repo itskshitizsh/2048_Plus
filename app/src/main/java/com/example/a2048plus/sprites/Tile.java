@@ -2,6 +2,8 @@ package com.example.a2048plus.sprites;
 
 import android.graphics.Canvas;
 
+import com.example.a2048plus.TileManagerCallback;
+
 public class Tile implements Sprite {
 
     private int screenWidth, screenHeight, standardSize;
