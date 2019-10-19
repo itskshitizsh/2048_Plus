@@ -374,4 +374,9 @@ public class TileManager implements TileManagerCallback, Sprite {
         }
     }
 
+    @Override
+    public void updateScore(int delta) {
+        callback.updateScore(delta);
+    }
+
 }
