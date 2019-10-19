@@ -9,14 +9,17 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.a2048plus.sprites.EndGame;
 import com.example.a2048plus.sprites.Grid;
 
-public class GameManager extends SurfaceView implements SurfaceHolder.Callback, SwipeCallback {
+public class GameManager extends SurfaceView implements SurfaceHolder.Callback, SwipeCallback, GameManagerCallback {
 
     private MainThread thread;
     private Grid grid;
     private int scWidth, scHeight, standardSize;
     private TileManager tileManager;
+    private boolean endGame = false;
+    private EndGame endgameSprite;
 
     private SwipeListener swipe;
 
@@ -34,7 +37,13 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
         standardSize = (int) (scWidth*0.88)/4;
 
         grid = new Grid(getResources(),scWidth,scHeight,standardSize);
-        tileManager = new TileManager(getResources(), standardSize, scWidth, scHeight);
+        tileManager = new TileManager(getResources(), standardSize, scWidth, scHeight, this);
+        endgameSprite = new EndGame(getResources(), scWidth, scHeight);
+    }
+
+    public void initGame() {
+        endGame = false;
+        tileManager.initGame();
     }
 
     @Override
@@ -64,7 +73,9 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
     }
 
     public void update(){
-        tileManager.update();
+        if (!endGame) {
+            tileManager.update();
+        }
     }
 
     @Override
@@ -73,16 +84,30 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
         canvas.drawRGB(255,255,255);
         grid.draw(canvas);
         tileManager.draw(canvas);
+        if (endGame) {
+            endgameSprite.draw(canvas);
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        swipe.onTouchEvent(event);
+        if (endGame) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                initGame();
+            }
+        } else {
+            swipe.onTouchEvent(event);
+        }
         return super.onTouchEvent(event);
     }
 
     @Override
     public void onSwipe(Direction direction) {
         tileManager.onSwipe(direction);
+    }
+
+    @Override
+    public void gameOver() {
+        endGame = true;
     }
 }

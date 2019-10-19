@@ -17,6 +17,11 @@ public class Tile implements Sprite {
     private int speed = 100;
     private boolean increment = false;
 
+    public Tile(int standardSize, int screenWidth, int screenHeight, TileManagerCallback callback, int matrixX, int matrixY, int count) {
+        this(standardSize, screenWidth, screenHeight, callback, matrixX, matrixY);
+        this.count = count;
+    }
+
     public Tile(int standardSize, int screenWidth, int screenHeight, TileManagerCallback callback, int matrixX, int matrixY) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -25,12 +30,12 @@ public class Tile implements Sprite {
         currentX = destX = screenWidth / 2 - 2 * standardSize + matrixY * standardSize;
         currentY = destY = screenHeight / 2 - 2 * standardSize + matrixX * standardSize;
         int chance = new Random().nextInt(100);
-        if (chance >= 70) {
-            if (chance >= 95) {
+        if (chance >= 80) {
+            if (chance >= 98) {
                 count = 5;
-            } else if (chance >= 90) {
+            } else if (chance >= 95) {
                 count = 4;
-            } else if (chance >= 80) {
+            } else if (chance >= 90) {
                 count = 3;
             } else {
                 count = 2;

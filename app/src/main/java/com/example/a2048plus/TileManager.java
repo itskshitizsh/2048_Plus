@@ -21,12 +21,15 @@ public class TileManager implements TileManagerCallback, Sprite {
     private boolean moving = false;
     private ArrayList<Tile> movingTiles;
     private boolean toSpawn = false;
+    private boolean endGame = false;
+    private GameManagerCallback callback;
 
-    public TileManager(Resources resources, int standardSize, int screenWidth, int screenHeight){
+    public TileManager(Resources resources, int standardSize, int screenWidth, int screenHeight, GameManagerCallback callback) {
         this.resources = resources;
         this.standardSize = standardSize;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+        this.callback = callback;
         initBitmaps();
 
         initGame();
@@ -57,7 +60,7 @@ public class TileManager implements TileManagerCallback, Sprite {
         }
     }
 
-    private void initGame() {
+    public void initGame() {
         matrix = new Tile[4][4];
         movingTiles = new ArrayList<>();
 
@@ -71,6 +74,15 @@ public class TileManager implements TileManagerCallback, Sprite {
                 i--;
             }
         }
+        // End Situation
+        /*for(int i=0;i<4;i++){
+            for(int j=0;j<4;j++){
+                if(i!=3 || j!=3){
+                    Tile t = new Tile(standardSize, screenWidth, screenHeight, this, i, j, 3*i+j+4);
+                    matrix[i][j] = t;
+                }
+            }
+        }*/
     }
 
     @Override
@@ -86,6 +98,9 @@ public class TileManager implements TileManagerCallback, Sprite {
                     matrix[i][j].draw(canvas);
                 }
             }
+        }
+        if (endGame) {
+            callback.gameOver();
         }
     }
 
@@ -316,6 +331,31 @@ public class TileManager implements TileManagerCallback, Sprite {
         if (movingTiles.isEmpty()) {
             moving = false;
             spawn();
+            checkEndgame();
+        }
+    }
+
+    private void checkEndgame() {
+        endGame = true;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (matrix[i][j] == null) {
+                    endGame = false;
+                    break;
+                }
+            }
+        }
+        if (endGame) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if ((i > 0 && matrix[i - 1][j].getValue() == matrix[i][j].getValue()) ||
+                            (i < 3 && matrix[i + 1][j].getValue() == matrix[i][j].getValue()) ||
+                            (j > 0 && matrix[i][j - 1].getValue() == matrix[i][j].getValue()) ||
+                            (j < 3 && matrix[i][j + 1].getValue() == matrix[i][j].getValue())) {
+                        endGame = false;
+                    }
+                }
+            }
         }
     }
 
