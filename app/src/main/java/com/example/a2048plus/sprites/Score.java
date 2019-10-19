@@ -60,6 +60,10 @@ public class Score implements Sprite {
         if (topScoreBonus) {
             canvas.drawBitmap(bmpTopScoreBonus, screenWidth / 2 - 2 * standardSize, screenHeight / 2 - 2 * standardSize - 2 * bmpTopScoreBonus.getHeight(), null);
         }
+        if (a2048Bonus) {
+            canvas.drawBitmap(bmp2048Bonus, screenWidth / 2 - 2 * standardSize, screenHeight / 2 - 2 * standardSize - 4 * bmp2048Bonus.getHeight(), null);
+        }
+
     }
 
     @Override
@@ -72,7 +76,7 @@ public class Score implements Sprite {
         checkTopScore();
     }
 
-    public void checkTopScore() {
+    private void checkTopScore() {
         topScore = prefs.getInt(SCORE_PREF, 0);
         if (topScore < score) {
             prefs.edit().putInt(SCORE_PREF, score).apply();
@@ -84,5 +88,15 @@ public class Score implements Sprite {
             bmpTopScoreBonus = Bitmap.createScaledBitmap(tsb, width, heigth, false);
             topScoreBonus = true;
         }
+    }
+
+    public void reached2048() {
+        a2048Bonus = true;
+
+        int width = (int) resources.getDimension(R.dimen.score_bonus_width);
+        int heigth = (int) resources.getDimension(R.dimen.score_bonus_height);
+        Bitmap r2048bmp = BitmapFactory.decodeResource(resources, R.drawable.a2048);
+        bmp2048Bonus = Bitmap.createScaledBitmap(r2048bmp, width, heigth, false);
+
     }
 }

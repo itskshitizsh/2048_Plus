@@ -121,4 +121,9 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
     public void updateScore(int delta) {
         score.updateScore(delta);
     }
+
+    @Override
+    public void reached2048() {
+        score.reached2048();
+    }
 }

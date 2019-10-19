@@ -379,4 +379,8 @@ public class TileManager implements TileManagerCallback, Sprite {
         callback.updateScore(delta);
     }
 
+    @Override
+    public void reached2048() {
+        callback.reached2048();
+    }
 }
