@@ -14,13 +14,18 @@ public class Score implements Sprite {
 
     private static final String SCORE_PREF = "Score pref";
 
+    private Resources resources;
     private int screenWidth, screenHeight, standardSize;
     private Bitmap bmpScore, bmpTopScore;
+    private Bitmap bmpTopScoreBonus, bmp2048Bonus;
     private int score, topScore;
     private SharedPreferences prefs;
     private Paint paint;
+    private boolean topScoreBonus = false;
+    private boolean a2048Bonus = false;
 
     public Score(Resources resources, int screenWidth, int screenHeight, int standardSize, SharedPreferences prefs) {
+        this.resources = resources;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         this.standardSize = standardSize;
@@ -51,6 +56,10 @@ public class Score implements Sprite {
         int width2 = (int) paint.measureText(String.valueOf(topScore));
         canvas.drawText(String.valueOf(score), screenWidth / 4 - width1 / 2, bmpScore.getHeight() * 4, paint);
         canvas.drawText(String.valueOf(topScore), 3 * screenWidth / 4 - width2 / 2, bmpTopScore.getHeight() * 4, paint);
+
+        if (topScoreBonus) {
+            canvas.drawBitmap(bmpTopScoreBonus, screenWidth / 2 - 2 * standardSize, screenHeight / 2 - 2 * standardSize - 2 * bmpTopScoreBonus.getHeight(), null);
+        }
     }
 
     @Override
@@ -68,6 +77,12 @@ public class Score implements Sprite {
         if (topScore < score) {
             prefs.edit().putInt(SCORE_PREF, score).apply();
             topScore = score;
+
+            int width = (int) resources.getDimension(R.dimen.score_bonus_width);
+            int heigth = (int) resources.getDimension(R.dimen.score_bonus_height);
+            Bitmap tsb = BitmapFactory.decodeResource(resources, R.drawable.highscore);
+            bmpTopScoreBonus = Bitmap.createScaledBitmap(tsb, width, heigth, false);
+            topScoreBonus = true;
         }
     }
 }
