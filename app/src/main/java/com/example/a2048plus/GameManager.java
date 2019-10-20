@@ -105,6 +105,7 @@ public class GameManager extends SurfaceView implements SurfaceHolder.Callback, 
         canvas.drawBitmap(restartButton, restartButtonX, restartButtonY, null);
         if (endGame) {
             endgameSprite.draw(canvas);
+            endGame = false;
         }
     }
 
