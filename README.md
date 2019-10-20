@@ -1,6 +1,6 @@
-# 2048_Plus
+# 2048 Plus
 
-## Created a 2048 Game Clone from Scratch
+## Source Code of a 2048 Game Clone from Scratch
 ### Logo:
 ![image](https://user-images.githubusercontent.com/44567943/67160094-d0ff8380-f36a-11e9-999c-ef48a2f2f360.png)
 
